@@ -25,11 +25,12 @@ class GetAlbumDetailInteractor(val albumRepository: AlbumRepository) : Interacto
 
     var albumId: String? = null
 
-    override fun invoke(): Event {
-        val id = albumId ?: throw IllegalStateException("Album id should be specified")
+    override fun invoke(): () -> Event =
+            {
+                val id = albumId ?: throw IllegalStateException("Album id should be specified")
 
-        val album = albumRepository.getAlbum(id)
-        return AlbumEvent(album)
-    }
+                val album = albumRepository.getAlbum(id)
+                AlbumEvent(album)
+            }
 
 }

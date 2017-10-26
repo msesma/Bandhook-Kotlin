@@ -20,7 +20,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.android.tools.build:gradle:3.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -51,6 +51,8 @@ allprojects {
         eventBusVersion = "2.4.1"
         picassoVersion = "2.5.2"
         priorityJobQueueVersion = "2.0.1"
+
+        coroutines = '0.18'
 
         // Unit tests
         mockitoVersion = "2.8.47"

@@ -18,5 +18,5 @@ package com.antonioleiva.bandhookkotlin.domain.interactor.base
 
 interface Interactor {
 
-    operator fun invoke(): Event
+    operator fun invoke(): () -> Event
 }

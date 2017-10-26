@@ -16,18 +16,24 @@
 
 package com.antonioleiva.bandhookkotlin.ui.presenter
 
-import com.antonioleiva.bandhookkotlin.domain.interactor.base.Bus
+import com.antonioleiva.bandhookkotlin.domain.interactor.base.Event
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.Deferred
+import kotlinx.coroutines.experimental.async
 
 interface Presenter<out T> {
 
     val view: T
-    val bus: Bus
 
-    fun onResume(){
-        bus.register(this)
+    fun onResume() {
     }
 
-    fun onPause(){
-        bus.unregister(this)
+    fun onPause() {
+    }
+
+    fun executeInteractor(interactor: () -> Event): Deferred<Event> = async(CommonPool) { suspendExecuteInteractor(interactor) }
+
+    suspend private fun suspendExecuteInteractor(interactor: () -> Event): Event {
+        return interactor()
     }
 }

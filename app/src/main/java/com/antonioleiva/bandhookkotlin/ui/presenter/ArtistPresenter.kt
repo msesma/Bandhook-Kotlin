@@ -18,32 +18,32 @@ package com.antonioleiva.bandhookkotlin.ui.presenter
 
 import com.antonioleiva.bandhookkotlin.domain.interactor.GetArtistDetailInteractor
 import com.antonioleiva.bandhookkotlin.domain.interactor.GetTopAlbumsInteractor
-import com.antonioleiva.bandhookkotlin.domain.interactor.base.Bus
-import com.antonioleiva.bandhookkotlin.domain.interactor.base.InteractorExecutor
 import com.antonioleiva.bandhookkotlin.domain.interactor.event.ArtistDetailEvent
 import com.antonioleiva.bandhookkotlin.domain.interactor.event.TopAlbumsEvent
 import com.antonioleiva.bandhookkotlin.ui.entity.ImageTitle
 import com.antonioleiva.bandhookkotlin.ui.entity.mapper.ArtistDetailDataMapper
 import com.antonioleiva.bandhookkotlin.ui.entity.mapper.ImageTitleDataMapper
 import com.antonioleiva.bandhookkotlin.ui.view.ArtistView
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 
 open class ArtistPresenter(
         override val view: ArtistView,
-        override val bus: Bus,
         val artistDetailInteractor: GetArtistDetailInteractor,
         val topAlbumsInteractor: GetTopAlbumsInteractor,
-        val interactorExecutor: InteractorExecutor,
         val artistDetailMapper: ArtistDetailDataMapper,
         val albumsMapper: ImageTitleDataMapper) : Presenter<ArtistView>, AlbumsPresenter {
 
     open fun init(artistId: String) {
         val artistDetailInteractor = artistDetailInteractor
         artistDetailInteractor.id = artistId
-        interactorExecutor.execute(artistDetailInteractor)
+        val resultArtist = executeInteractor(artistDetailInteractor.invoke())
+        launch(UI) { onEvent(resultArtist.await() as ArtistDetailEvent) }
 
         val topAlbumsInteractor = topAlbumsInteractor
         topAlbumsInteractor.artistId = artistId
-        interactorExecutor.execute(this.topAlbumsInteractor)
+        val resultAlbum = executeInteractor(this.topAlbumsInteractor.invoke())
+        launch(UI) { onEvent(resultAlbum.await() as TopAlbumsEvent) }
     }
 
     fun onEvent(event: ArtistDetailEvent) {
