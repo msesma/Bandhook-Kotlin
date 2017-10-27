@@ -20,6 +20,7 @@ import com.antonioleiva.bandhookkotlin.domain.entity.Album
 import com.antonioleiva.bandhookkotlin.domain.entity.Artist
 import com.antonioleiva.bandhookkotlin.domain.interactor.GetArtistDetailInteractor
 import com.antonioleiva.bandhookkotlin.domain.interactor.GetTopAlbumsInteractor
+import com.antonioleiva.bandhookkotlin.domain.interactor.base.InteractorExecutor
 import com.antonioleiva.bandhookkotlin.domain.interactor.event.ArtistDetailEvent
 import com.antonioleiva.bandhookkotlin.domain.interactor.event.TopAlbumsEvent
 import com.antonioleiva.bandhookkotlin.domain.repository.AlbumRepository
@@ -28,6 +29,7 @@ import com.antonioleiva.bandhookkotlin.ui.entity.ImageTitle
 import com.antonioleiva.bandhookkotlin.ui.entity.mapper.ArtistDetailDataMapper
 import com.antonioleiva.bandhookkotlin.ui.entity.mapper.ImageTitleDataMapper
 import com.antonioleiva.bandhookkotlin.ui.view.ArtistView
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -44,6 +46,8 @@ class ArtistPresenterTest {
     lateinit var artistRepository: ArtistRepository
     @Mock
     lateinit var albumRepository: AlbumRepository
+    @Mock
+    lateinit var interactorExecutor: InteractorExecutor
 
 
     lateinit var artistDetailInteractor: GetArtistDetailInteractor
@@ -63,11 +67,32 @@ class ArtistPresenterTest {
         albumsMapper = ImageTitleDataMapper()
 
 
-        artistPresenter = ArtistPresenter(artistView,  artistDetailInteractor, topAlbumsInteractor,
-                 artistDetailMapper, albumsMapper)
+        artistPresenter = ArtistPresenter(artistView, artistDetailInteractor, topAlbumsInteractor,
+                artistDetailMapper, albumsMapper, interactorExecutor)
     }
 
+    @Test
+    fun testInitArtistInteractor() {
+        // When
+        artistPresenter.init(artistId)
 
+        // Then
+        assertEquals(artistId, artistDetailInteractor.id)
+        verify(interactorExecutor).execute(artistDetailInteractor.getFun())
+        artistPresenter = ArtistPresenter(artistView, artistDetailInteractor, topAlbumsInteractor,
+                artistDetailMapper, albumsMapper, interactorExecutor)
+    }
+
+    @Test
+    fun testInitAlbumsInteractor() {
+        // When
+        artistPresenter.init(artistId)
+
+        // Then
+        assertEquals(artistId, artistDetailInteractor.id)
+        verify(interactorExecutor).execute(artistDetailInteractor.getFun())
+
+    }
 
     @Test
     fun testOnArtistDetailEvent() {

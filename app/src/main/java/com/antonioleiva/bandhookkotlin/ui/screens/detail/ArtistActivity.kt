@@ -96,13 +96,7 @@ class ArtistActivity : BaseActivity<ArtistLayout>(), ArtistView, AlbumsFragmentC
 
     override fun onResume() {
         super.onResume()
-        presenter.onResume()
         presenter.init(getNavigationId())
-    }
-
-    override fun onPause() {
-        super.onPause()
-        presenter.onPause()
     }
 
     override fun showArtist(artistDetail: ArtistDetail) {

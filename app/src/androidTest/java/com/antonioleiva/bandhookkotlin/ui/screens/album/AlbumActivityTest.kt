@@ -89,8 +89,6 @@ class AlbumActivityTest : ActivityInstrumentationTestCase2<AlbumActivity>(AlbumA
         instrumentation.callActivityOnPause(albumActivity)
 
         // Then
-        verify(presenter).onPause()
-        verify(presenter).onResume()
         verify(presenter).init(id)
     }
 

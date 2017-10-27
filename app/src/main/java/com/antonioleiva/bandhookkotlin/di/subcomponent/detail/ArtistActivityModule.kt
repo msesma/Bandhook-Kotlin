@@ -4,6 +4,7 @@ import com.antonioleiva.bandhookkotlin.di.ActivityModule
 import com.antonioleiva.bandhookkotlin.di.scope.ActivityScope
 import com.antonioleiva.bandhookkotlin.domain.interactor.GetArtistDetailInteractor
 import com.antonioleiva.bandhookkotlin.domain.interactor.GetTopAlbumsInteractor
+import com.antonioleiva.bandhookkotlin.domain.interactor.base.InteractorExecutor
 import com.antonioleiva.bandhookkotlin.ui.entity.mapper.ArtistDetailDataMapper
 import com.antonioleiva.bandhookkotlin.ui.entity.mapper.ImageTitleDataMapper
 import com.antonioleiva.bandhookkotlin.ui.presenter.ArtistPresenter
@@ -31,9 +32,10 @@ class ArtistActivityModule(activity: ArtistActivity) : ActivityModule(activity) 
                                  artistDetailInteractor: GetArtistDetailInteractor,
                                  topAlbumsInteractor: GetTopAlbumsInteractor,
                                  detailDataMapper: ArtistDetailDataMapper,
-                                 imageTitleDataMapper: ImageTitleDataMapper)
+                                 imageTitleDataMapper: ImageTitleDataMapper,
+                                 interactorExecutor: InteractorExecutor)
             = ArtistPresenter(view,  artistDetailInteractor, topAlbumsInteractor,
-             detailDataMapper, imageTitleDataMapper)
+            detailDataMapper, imageTitleDataMapper, interactorExecutor)
 
     @Provides @ActivityScope
     fun provideAlbumsFragment() = AlbumsFragment()

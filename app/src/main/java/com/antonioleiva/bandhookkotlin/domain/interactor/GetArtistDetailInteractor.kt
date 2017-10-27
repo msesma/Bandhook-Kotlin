@@ -25,7 +25,7 @@ class GetArtistDetailInteractor(val artistRepository: ArtistRepository) : Intera
 
     var id: String? = null
 
-    override fun invoke(): () -> Event =
+    override fun getFun(): () -> Event =
             {
                 val id = this.id ?: throw IllegalStateException("id can´t be null")
                 val artist = artistRepository.getArtist(id)

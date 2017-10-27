@@ -1,5 +1,12 @@
-# Bandhook Kotlin
 
+
+# Coroutines
+This is a fork of the original project by Antonio Leiva.
+I have removed JobQueue and Event Bus and implemented the "threading" with Coroutines.
+Unit tests has been modified with the exception of those that call the coroutines that are pending.
+Instrumentation tests are broken. 
+
+# Bandhook Kotlin
 This project is a small replica of the app I developed some time ago. [Bandhook can still be found on Play Store](https://play.google.com/store/apps/details?id=com.limecreativelabs.bandhook)
 
 At the moment it will only connect to LastFm and retrieve some music bands. It will let navigate to the artist detail. This is what you´ll get:

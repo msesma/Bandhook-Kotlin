@@ -14,24 +14,16 @@
  * limitations under the License.
  */
 
-package com.antonioleiva.bandhookkotlin.ui.presenter
+package com.antonioleiva.bandhookkotlin.domain.interactor.base
 
-import com.antonioleiva.bandhookkotlin.domain.interactor.base.Event
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
+import javax.inject.Inject
 
-interface Presenter<out T> {
+class InteractorExecutor @Inject constructor() {
 
-    val view: T
-
-    fun onResume() {
-    }
-
-    fun onPause() {
-    }
-
-    fun executeInteractor(interactor: () -> Event): Deferred<Event> = async(CommonPool) { suspendExecuteInteractor(interactor) }
+    fun execute(interactor: () -> Event): Deferred<Event> = async(CommonPool) { suspendExecuteInteractor(interactor) }
 
     suspend private fun suspendExecuteInteractor(interactor: () -> Event): Event {
         return interactor()

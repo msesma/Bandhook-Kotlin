@@ -18,6 +18,7 @@ package com.antonioleiva.bandhookkotlin.ui.presenter
 
 import com.antonioleiva.bandhookkotlin.domain.interactor.GetArtistDetailInteractor
 import com.antonioleiva.bandhookkotlin.domain.interactor.GetTopAlbumsInteractor
+import com.antonioleiva.bandhookkotlin.domain.interactor.base.InteractorExecutor
 import com.antonioleiva.bandhookkotlin.domain.interactor.event.ArtistDetailEvent
 import com.antonioleiva.bandhookkotlin.domain.interactor.event.TopAlbumsEvent
 import com.antonioleiva.bandhookkotlin.ui.entity.ImageTitle
@@ -28,21 +29,22 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
 open class ArtistPresenter(
-        override val view: ArtistView,
-        val artistDetailInteractor: GetArtistDetailInteractor,
-        val topAlbumsInteractor: GetTopAlbumsInteractor,
-        val artistDetailMapper: ArtistDetailDataMapper,
-        val albumsMapper: ImageTitleDataMapper) : Presenter<ArtistView>, AlbumsPresenter {
+        private val view: ArtistView,
+        private val artistDetailInteractor: GetArtistDetailInteractor,
+        private val topAlbumsInteractor: GetTopAlbumsInteractor,
+        private val artistDetailMapper: ArtistDetailDataMapper,
+        private val albumsMapper: ImageTitleDataMapper,
+        private val interactorExecutor: InteractorExecutor) : AlbumsPresenter {
 
     open fun init(artistId: String) {
         val artistDetailInteractor = artistDetailInteractor
         artistDetailInteractor.id = artistId
-        val resultArtist = executeInteractor(artistDetailInteractor.invoke())
+        val resultArtist = interactorExecutor.execute(artistDetailInteractor.getFun())
         launch(UI) { onEvent(resultArtist.await() as ArtistDetailEvent) }
 
         val topAlbumsInteractor = topAlbumsInteractor
         topAlbumsInteractor.artistId = artistId
-        val resultAlbum = executeInteractor(this.topAlbumsInteractor.invoke())
+        val resultAlbum = interactorExecutor.execute(this.topAlbumsInteractor.getFun())
         launch(UI) { onEvent(resultAlbum.await() as TopAlbumsEvent) }
     }
 

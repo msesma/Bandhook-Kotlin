@@ -17,6 +17,7 @@
 package com.antonioleiva.bandhookkotlin.ui.presenter
 
 import com.antonioleiva.bandhookkotlin.domain.interactor.GetRecommendedArtistsInteractor
+import com.antonioleiva.bandhookkotlin.domain.interactor.base.InteractorExecutor
 import com.antonioleiva.bandhookkotlin.domain.interactor.event.ArtistsEvent
 import com.antonioleiva.bandhookkotlin.ui.entity.ImageTitle
 import com.antonioleiva.bandhookkotlin.ui.entity.mapper.ImageTitleDataMapper
@@ -25,12 +26,13 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
 class MainPresenter(
-        override val view: MainView,
-        val recommendedArtistsInteractor: GetRecommendedArtistsInteractor,
-        val mapper: ImageTitleDataMapper) : Presenter<MainView> {
+        private val view: MainView,
+        private val recommendedArtistsInteractor: GetRecommendedArtistsInteractor,
+        private val mapper: ImageTitleDataMapper,
+        private val interactorExecutor: InteractorExecutor) {
 
-    override fun onResume() {
-        val result = executeInteractor(recommendedArtistsInteractor.invoke())
+    fun onResume() {
+        val result = interactorExecutor.execute(recommendedArtistsInteractor.getFun())
         launch(UI) { onEvent(result.await() as ArtistsEvent) }
     }
 

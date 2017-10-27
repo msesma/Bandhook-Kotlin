@@ -57,7 +57,7 @@ class GetTopAlbumsInteractorTest {
         getTopAlbumsInteractor.artistId = artistId
 
         // When
-        val event = getTopAlbumsInteractor.invoke()
+        val event = getTopAlbumsInteractor.getFun().invoke()
 
         // Then
         Assert.assertEquals(TopAlbumsEvent::class.java, event.javaClass)
@@ -70,7 +70,7 @@ class GetTopAlbumsInteractorTest {
         getTopAlbumsInteractor.artistName = artistName
 
         // When
-        val event = getTopAlbumsInteractor.invoke()
+        val event = getTopAlbumsInteractor.getFun().invoke()
 
         // Then
         Assert.assertEquals(TopAlbumsEvent::class.java, event.javaClass)
@@ -80,7 +80,7 @@ class GetTopAlbumsInteractorTest {
     @Test(expected = IllegalStateException::class)
     fun testInvoke_withoutData() {
         // When
-        getTopAlbumsInteractor.invoke()
+        getTopAlbumsInteractor.getFun().invoke()
 
         // Then expected illegal state exception
     }

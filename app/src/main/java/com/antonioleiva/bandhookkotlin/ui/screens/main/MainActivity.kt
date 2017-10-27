@@ -54,11 +54,6 @@ class MainActivity : BaseActivity<MainLayout>(), MainView {
         presenter.onResume()
     }
 
-    override fun onPause() {
-        super.onPause()
-        presenter.onPause()
-    }
-
     override fun showArtists(artists: List<ImageTitle>) {
         adapter.items = artists
     }

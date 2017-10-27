@@ -49,7 +49,7 @@ class GetAlbumDetailInteractorTest {
     @Test(expected = IllegalStateException::class)
     fun testInvoke_withoutId() {
         // When
-        getAlbumDetailInteractor.invoke()
+        getAlbumDetailInteractor.getFun().invoke()
 
         // Then expected illegal state exception
     }
@@ -60,7 +60,7 @@ class GetAlbumDetailInteractorTest {
         getAlbumDetailInteractor.albumId = albumId
 
         // When
-        val event = getAlbumDetailInteractor.invoke()
+        val event = getAlbumDetailInteractor.getFun().invoke()
 
         // Then
         assertEquals(AlbumEvent::class.java, event.javaClass)

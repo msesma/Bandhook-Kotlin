@@ -19,10 +19,12 @@ package com.antonioleiva.bandhookkotlin.ui.presenter
 import com.antonioleiva.bandhookkotlin.domain.entity.Album
 import com.antonioleiva.bandhookkotlin.domain.entity.Artist
 import com.antonioleiva.bandhookkotlin.domain.interactor.GetAlbumDetailInteractor
+import com.antonioleiva.bandhookkotlin.domain.interactor.base.InteractorExecutor
 import com.antonioleiva.bandhookkotlin.domain.interactor.event.AlbumEvent
 import com.antonioleiva.bandhookkotlin.domain.repository.AlbumRepository
 import com.antonioleiva.bandhookkotlin.ui.entity.mapper.AlbumDetailDataMapper
 import com.antonioleiva.bandhookkotlin.ui.view.AlbumView
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,7 +36,8 @@ import org.mockito.junit.MockitoJUnitRunner
 class AlbumPresenterTest {
     @Mock
     lateinit var albumView: AlbumView
-
+    @Mock
+    lateinit var interactorExecutor: InteractorExecutor
     @Mock
     lateinit var albumRepository: AlbumRepository
 
@@ -50,10 +53,18 @@ class AlbumPresenterTest {
         albumInteractor = GetAlbumDetailInteractor(albumRepository)
         albumDetailMapper = AlbumDetailDataMapper()
 
-        albumPresenter = AlbumPresenter(albumView, albumInteractor, albumDetailMapper)
+        albumPresenter = AlbumPresenter(albumView, albumInteractor, albumDetailMapper,interactorExecutor)
     }
 
+    @Test
+    fun testInit() {
+        // When
+        albumPresenter.init(albumId)
 
+        // Then
+        Assert.assertEquals(albumId, albumInteractor.albumId)
+        Mockito.verify(interactorExecutor).execute(albumInteractor.getFun())
+    }
 
     @Test
     fun testOnEvent() {

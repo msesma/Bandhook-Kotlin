@@ -26,7 +26,7 @@ class GetTopAlbumsInteractor(val albumRepository: AlbumRepository) : Interactor 
     var artistId: String? = null
     var artistName: String? = null
 
-    override fun invoke(): () -> Event =
+    override fun getFun(): () -> Event =
             {
                 if (artistId == null && artistName == null) {
                     throw IllegalStateException("Either mbid or name should be specified")

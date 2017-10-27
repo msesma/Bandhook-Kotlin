@@ -17,6 +17,7 @@
 package com.antonioleiva.bandhookkotlin.ui.presenter
 
 import com.antonioleiva.bandhookkotlin.domain.interactor.GetAlbumDetailInteractor
+import com.antonioleiva.bandhookkotlin.domain.interactor.base.InteractorExecutor
 import com.antonioleiva.bandhookkotlin.domain.interactor.event.AlbumEvent
 import com.antonioleiva.bandhookkotlin.ui.entity.mapper.AlbumDetailDataMapper
 import com.antonioleiva.bandhookkotlin.ui.view.AlbumView
@@ -24,14 +25,15 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
 open class AlbumPresenter(
-        override val view: AlbumView,
+        val view: AlbumView,
         val albumInteractor: GetAlbumDetailInteractor,
-        val albumDetailMapper: AlbumDetailDataMapper) : Presenter<AlbumView> {
+        val albumDetailMapper: AlbumDetailDataMapper,
+        private val interactorExecutor: InteractorExecutor) {
 
     open fun init(albumId: String) {
         val albumDetailInteractor = albumInteractor
         albumInteractor.albumId = albumId
-        val result = executeInteractor(albumDetailInteractor.invoke())
+        val result = interactorExecutor.execute(albumDetailInteractor.getFun())
         launch(UI) { onEvent(result.await() as AlbumEvent) }
     }
 
